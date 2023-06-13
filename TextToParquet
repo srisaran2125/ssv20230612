@@ -1,0 +1,46 @@
+
+
+
+# Set the input and output file paths
+input_file="location_geocode.csv"
+output_file="output.parquet"
+
+# Convert the input file to CSV format
+cat $input_file | tr '\n' ',' | sed 's/,$/\n/' > input.csv
+
+# Convert the CSV file to Parquet format
+cat location_geocode.csv | \
+parquet-tools write \
+--overwrite \
+--row-group-size 10000 \
+--compression snappy \
+--output-file $output_file \
+--schema "line:UTF8" \
+--delimiter ','
+
+Text to parquet using Spark-submit
+  spark-submit \
+  --master yarn \
+  --deploy-mode client \
+  --class org.sageit.bigdata.TextToParquet \
+  --num-executors 4 \
+  --executor-memory 4g \
+  --executor-cores 2 \
+  --jars /hdp/current/spark2-client/jars/spark2-hdp-yarn-archive.jar,/home/bigdatacloudxlab14968/saisri_spark/SSV20230306-1.0-SNAPSHOT.jar \
+  --files hdfs://cxln1.c.thelab-240901.internal:8020/user/bigdatacloudxlab14968/ssv20230314/TextToParquet.scala \
+  hdfs://cxln1.c.thelab-240901.internal:8020/user/bigdatacloudxlab14968/ssv20230314/train_NYCTF_dataset.csv \
+  hdfs://cxln1.c.thelab-240901.internal:8020/user/bigdatacloudxlab14968/ssv20230314/output_parquet
+
+one million nineteen thousand nine hundred twenty-six records
+
+hdfs dfs -copyToLocal /user/bigdatacloudxlab14968/ssv20230314/SSV20230306-1.0-SNAPSHOT.jar  /home/bigdatacloudxlab14968/saisri_spark/
+
+hdfs dfs -copyToLocal /user/bigdatacloudxlab14968/ssv20230314/output_parquet/part-00000-d049a917-192c-449e-b0fb-3bd9d465d225.snappy.parquet /home/bigdatacloudxlab14968/saisri_spark/output_parquet
+
+
+val df = spark.read.parquet("/user/bigdatacloudxlab14968/ssv20230314/output_parquet/part-00000-d049a917-192c-449e-b0fb-3bd9d465d225.snappy.parquet")
+
+df = spark.read.parquet("/user/bigdatacloudxlab14968/ssv20230314/output_parquet/part-00000-d049a917-192c-449e-b0fb-3bd9d465d225.snappy.parquet")
+
+df.show(10,flase)
+df.count()
