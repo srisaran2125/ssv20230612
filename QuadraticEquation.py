@@ -22,3 +22,5 @@ if (a!=0.0):
         print("The root2 is: ", rp, "- i",ip)
 else:
     print("Its Not a quadratic equation.")
+
+    # End of the program
