@@ -11,7 +11,7 @@ def binarySearch(numbers, low, high, x):
             return binarySearch(numbers, mid+1, high, x)
     else:
         return -1
-numbers = [ 1,4,6,7,12,17,25 ]   #binary search requires sorted numbers
+numbers = [ 1,4,6,7,12,17,25, 30 ]  
 x = 7
 result = binarySearch(numbers, 0, len(numbers)-1, x)
 if (result != -1):
