@@ -2,8 +2,10 @@ def binarySearch(numbers, low, high, x):
     if (high >= low):
         mid = low + (high - low)//2
         if (numbers[mid] == x):
+            #if mid is equal to x
             return mid
         elif (numbers[mid] > x):
+            #if mid is greater than the element X
             return binarySearch(numbers, low, mid-1, x)
         else:
             return binarySearch(numbers, mid+1, high, x)
